@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Ganni Devlog</title>
-    <link>https://koolganni.github.io/</link>
-    <description>Recent content on Ganni Devlog</description>
+    <title>Posts on Ganni Devlog</title>
+    <link>https://koolganni.github.io/posts/</link>
+    <description>Recent content in Posts on Ganni Devlog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>kr-ko</language>
-    <lastBuildDate>Sun, 11 Apr 2021 19:19:08 +0900</lastBuildDate><atom:link href="https://koolganni.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 11 Apr 2021 19:19:08 +0900</lastBuildDate><atom:link href="https://koolganni.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>새 블로그 시작</title>
       <link>https://koolganni.github.io/posts/test/</link>
@@ -17,8 +17,6 @@
 깔끔한 테마에 필요한 기능들만 딱 있어서 좋다.
 앞으로 노션, 미디엄에 정리해둔 글들 틈틈이 옮겨봐야지!</description>
     </item>
-    
-    
     
   </channel>
 </rss>
