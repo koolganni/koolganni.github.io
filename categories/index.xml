@@ -5,6 +5,16 @@
     <link>https://koolganni.github.io/categories/</link>
     <description>Recent content in Categories on Ganni Devlog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>kr-ko</language><atom:link href="https://koolganni.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <language>kr-ko</language>
+    <lastBuildDate>Thu, 15 Apr 2021 20:19:36 +0900</lastBuildDate><atom:link href="https://koolganni.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Deep Learning</title>
+      <link>https://koolganni.github.io/categories/deep-learning/</link>
+      <pubDate>Thu, 15 Apr 2021 20:19:36 +0900</pubDate>
+      
+      <guid>https://koolganni.github.io/categories/deep-learning/</guid>
+      <description></description>
+    </item>
+    
   </channel>
 </rss>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Ganni Devlog</title>
-    <link>https://koolganni.github.io/</link>
-    <description>Recent content on Ganni Devlog</description>
+    <title>Deep Learning on Ganni Devlog</title>
+    <link>https://koolganni.github.io/categories/deep-learning/</link>
+    <description>Recent content in Deep Learning on Ganni Devlog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>kr-ko</language>
-    <lastBuildDate>Thu, 15 Apr 2021 20:19:36 +0900</lastBuildDate><atom:link href="https://koolganni.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 15 Apr 2021 20:19:36 +0900</lastBuildDate><atom:link href="https://koolganni.github.io/categories/deep-learning/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Attention is All You Need</title>
       <link>https://koolganni.github.io/posts/attention_model/</link>
@@ -17,19 +17,6 @@
 장기 의존성 문제 (Long-term dependency)란, 시퀀스 즉 문장이 길어질수록 이전 단어의 정보를 잃어버려 정보의 손실이 발생하는 것을 의미한다. 이러한 문제를 해결하기 위해 과거 정보와 현재 정보를 적절히 조절해 활용하는 LSTM, LSTM 의 간소화 버전 GRU 모델이 나왔다.
 하지만 LSTM, GRU 모델로도 해결할 수 없는 문제가 있다.</description>
     </item>
-    
-    <item>
-      <title>새 블로그 시작</title>
-      <link>https://koolganni.github.io/posts/test/</link>
-      <pubDate>Sun, 11 Apr 2021 19:19:08 +0900</pubDate>
-      
-      <guid>https://koolganni.github.io/posts/test/</guid>
-      <description>Hugo + Github Pages 조합으로 블로그를 만들었다.
-깔끔한 테마에 필요한 기능들만 딱 있어서 좋다.
-앞으로 노션, 미디엄에 정리해둔 글들 틈틈이 옮겨봐야지!</description>
-    </item>
-    
-    
     
   </channel>
 </rss>
