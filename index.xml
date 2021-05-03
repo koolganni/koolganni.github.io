@@ -5,7 +5,20 @@
     <link>https://koolganni.github.io/</link>
     <description>Recent content on Ganni Devlog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>kr-ko</language><atom:link href="https://koolganni.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <language>kr-ko</language>
+    <lastBuildDate>Sat, 01 May 2021 22:51:04 +0900</lastBuildDate><atom:link href="https://koolganni.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>신뢰구간 (Confidence Interval) 이란?</title>
+      <link>https://koolganni.github.io/posts/confidence_interval/</link>
+      <pubDate>Sat, 01 May 2021 22:51:04 +0900</pubDate>
+      
+      <guid>https://koolganni.github.io/posts/confidence_interval/</guid>
+      <description>가설 검정을 하다보면 95%의 신뢰구간, 99%의 신뢰구간을 이야기할 때가 많습니다. 여기서 신뢰구간이란 정확히 무엇을 의미하는 것일까요?
+ 신뢰구간과 신뢰도의 의미 먼저, 표본의 정보를 활용해 모집단의 특징을 추측하는 것을 우리는 &amp;lsquo;추정&amp;rsquo;이라고 합니다.
+모집단의 특징 중에서 모집단의 평균, 즉 모평균(μ)을 추정하는 상황을 가정해봅시다.
+예를 들어 모집단의 평균 나이가 30일 때 모평균이 1 ≤ μ ≤ 100 추정범위 안에 들어가는지 추측하는 것은 100% 확실한 추정입니다. 하지만 모평균으로 추정될 수 있는 값이 매우 많기 때문에 추정의 가치가 없다고 할 수 있습니다.</description>
+    </item>
+    
     
     
   </channel>
