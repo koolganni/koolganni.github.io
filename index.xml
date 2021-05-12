@@ -29,6 +29,16 @@
 예를 들어 모집단의 평균 나이가 30일 때 모평균이 1 ≤ μ ≤ 100 추정범위 안에 들어가는지 추측하는 것은 100% 확실한 추정입니다. 하지만 모평균으로 추정될 수 있는 값이 매우 많기 때문에 추정의 가치가 없다고 할 수 있습니다.</description>
     </item>
     
+    <item>
+      <title>경사 하강법 (Gradient Descent)</title>
+      <link>https://koolganni.github.io/posts/machine-learning/gradient-descent/</link>
+      <pubDate>Sun, 11 Apr 2021 19:22:21 +0900</pubDate>
+      
+      <guid>https://koolganni.github.io/posts/machine-learning/gradient-descent/</guid>
+      <description>머신러닝 그리고 딥러닝 모델 학습에서 가장 중요한 것은 실제 값과 예측 값의 차이를 최소화해 더 정확한 예측을 하는 것입니다. 경사 하강법은 이를 위한 방법으로 &amp;lsquo;데이터를 기반으로 알고리즘이 스스로 학습한다&amp;rsquo;는 머신러닝의 개념을 실현한 핵심 기법 중 하나입니다.
+ 비용 함수 (Cost Function) 아래 그림과 같이 주어진 X 에 대해 Y 를 예측하는 예측 함수, 다시 말해 가설 함수 Y = B0 + B1*X를 구하는 상황을 생각해봅시다. 우리는 실제 관측치인 주황색 점과 가설 함수의 예측치 간의 차이(error)를 최소화하는 B0(절편)과 B1(기울기)를 알아야 합니다.</description>
+    </item>
+    
     
     
   </channel>
