@@ -25,5 +25,23 @@
       <description></description>
     </item>
     
+    <item>
+      <title>Deep Learning</title>
+      <link>https://koolganni.github.io/categories/deep-learning/</link>
+      <pubDate>Sun, 11 Apr 2021 19:22:21 +0900</pubDate>
+      
+      <guid>https://koolganni.github.io/categories/deep-learning/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Machine Learning</title>
+      <link>https://koolganni.github.io/categories/machine-learning/</link>
+      <pubDate>Sun, 11 Apr 2021 19:22:21 +0900</pubDate>
+      
+      <guid>https://koolganni.github.io/categories/machine-learning/</guid>
+      <description></description>
+    </item>
+    
   </channel>
 </rss>

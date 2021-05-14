@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>비용 함수 on Ganni Devlog</title>
-    <link>https://koolganni.github.io/tags/%EB%B9%84%EC%9A%A9-%ED%95%A8%EC%88%98/</link>
-    <description>Recent content in 비용 함수 on Ganni Devlog</description>
+    <title>확률적 경사 하강법 (SGD) on Ganni Devlog</title>
+    <link>https://koolganni.github.io/tags/%ED%99%95%EB%A5%A0%EC%A0%81-%EA%B2%BD%EC%82%AC-%ED%95%98%EA%B0%95%EB%B2%95-sgd/</link>
+    <description>Recent content in 확률적 경사 하강법 (SGD) on Ganni Devlog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>kr-ko</language>
-    <lastBuildDate>Sun, 11 Apr 2021 19:22:21 +0900</lastBuildDate><atom:link href="https://koolganni.github.io/tags/%EB%B9%84%EC%9A%A9-%ED%95%A8%EC%88%98/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 11 Apr 2021 19:22:21 +0900</lastBuildDate><atom:link href="https://koolganni.github.io/tags/%ED%99%95%EB%A5%A0%EC%A0%81-%EA%B2%BD%EC%82%AC-%ED%95%98%EA%B0%95%EB%B2%95-sgd/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>경사 하강법 (Gradient Descent)</title>
       <link>https://koolganni.github.io/posts/machine-learning/gradient-descent/</link>
