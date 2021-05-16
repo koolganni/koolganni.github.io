@@ -18,5 +18,16 @@
 위 그림에서는 3가지 선들 중 파란색 선이 모든 데이터 세트를 정확하게 예측한 것으로 보입니다.</description>
     </item>
     
+    <item>
+      <title>L1 과 L2 정규화 (Regularization)</title>
+      <link>https://koolganni.github.io/posts/machine-learning/l1-l2-regularization/</link>
+      <pubDate>Sat, 06 Feb 2021 20:21:54 +0900</pubDate>
+      
+      <guid>https://koolganni.github.io/posts/machine-learning/l1-l2-regularization/</guid>
+      <description>모델의 성능을 높이는 데에는 여러 방법이 있습니다. Overfitting(과대적합)을 억제하는 방법 중 L1 정규화 및 L2 정규화 기술에 대해 알아보겠습니다.
+ Overfitting 아래 그림의 맨 오른쪽은 모델이 주어진 데이터 세트에 대해 지나치게 많이 학습을 한 Overfitting(과대적합)의 모습을 보여줍니다. 이는 모델이 학습 데이터를 과하게 암기하여 훈련 데이터에 포함된 노이즈까지 학습한 상태라고 해석할 수 있습니다.
+학습 데이터에 모델이 Overfitting 되는 현상은 모델의 성능을 떨어트리는 주요 이슈입니다. 훈련 데이터에 대한 정확도는 높을지라도 새로운 데이터, 즉 검증 데이터나 테스트 데이터에 대해서는 제대로 동작하지 않습니다.</description>
+    </item>
+    
   </channel>
 </rss>

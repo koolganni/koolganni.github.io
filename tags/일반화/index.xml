@@ -1,23 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Deep Learning on Ganni Devlog</title>
-    <link>https://koolganni.github.io/categories/deep-learning/</link>
-    <description>Recent content in Deep Learning on Ganni Devlog</description>
+    <title>일반화 on Ganni Devlog</title>
+    <link>https://koolganni.github.io/tags/%EC%9D%BC%EB%B0%98%ED%99%94/</link>
+    <description>Recent content in 일반화 on Ganni Devlog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>kr-ko</language>
-    <lastBuildDate>Sun, 11 Apr 2021 19:22:21 +0900</lastBuildDate><atom:link href="https://koolganni.github.io/categories/deep-learning/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>경사 하강법 (Gradient Descent)</title>
-      <link>https://koolganni.github.io/posts/machine-learning/gradient-descent/</link>
-      <pubDate>Sun, 11 Apr 2021 19:22:21 +0900</pubDate>
-      
-      <guid>https://koolganni.github.io/posts/machine-learning/gradient-descent/</guid>
-      <description>머신 러닝 그리고 딥러닝 모델 학습의 목표는 더 정확한 예측을 위해 최적의 가중치와 편향을 찾는 것입니다. 이를 위한 방법으로 주로 사용되는 경사 하강법에 대해 알아보겠습니다.
- 비용 함수 (Cost Function) X 축은 입력값이고 Y 축은 목푯값입니다. 이때 X 를 입력하면 Y 를 예측하여 출력하는 모델을 만든다고 가정해봅시다. 머신 러닝에서 𝑊 는 가중치 벡터를 의미하고 𝑏 는 편향을 나타냅니다.
-위 그림에서는 3가지 선들 중 파란색 선이 모든 데이터 세트를 정확하게 예측한 것으로 보입니다.</description>
-    </item>
-    
+    <lastBuildDate>Sat, 06 Feb 2021 20:21:54 +0900</lastBuildDate><atom:link href="https://koolganni.github.io/tags/%EC%9D%BC%EB%B0%98%ED%99%94/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>L1 과 L2 정규화 (Regularization)</title>
       <link>https://koolganni.github.io/posts/machine-learning/l1-l2-regularization/</link>
