@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Gini Impurity on Ganni Devlog</title>
+    <link>https://koolganni.github.io/tags/gini-impurity/</link>
+    <description>Recent content in Gini Impurity on Ganni Devlog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>kr-ko</language>
+    <lastBuildDate>Sat, 20 Feb 2021 18:51:50 +0900</lastBuildDate><atom:link href="https://koolganni.github.io/tags/gini-impurity/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>의사결정 나무 (Decision Tree)</title>
+      <link>https://koolganni.github.io/posts/machine-learning/decision-tree/</link>
+      <pubDate>Sat, 20 Feb 2021 18:51:50 +0900</pubDate>
+      
+      <guid>https://koolganni.github.io/posts/machine-learning/decision-tree/</guid>
+      <description>LightGBM XGBoost와 같은 Gradient Boosting Decision Tree (GBDT) 기반 앙상블 모델은 Kaggle Competition 상위권 팀에서 많이 사용하는 모델로 유명합니다. 이번 글에서는 Decision Tree 분류 모델에 대해 알아보겠습니다.
+ Decision Tree Decision Tree (의사결정 나무)는 데이터에 내재되어 있는 패턴을 예측 가능한 분류 규칙들의 조합으로 나타내어 목표 변수에 대한 분류(Classification) 또는 예측(Regression)을 수행하는 기법입니다. 질문을 던지면서 찾고자 하는 대상을 좁혀나가는 일련의 필터링 과정 혹은 스무고개 놀이와 비슷한 개념으로 아래 그림과 같이 트리의 형태를 가지고 있습니다.</description>
+    </item>
+    
+  </channel>
+</rss>

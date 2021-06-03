@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>의사결정 나무 (Decision Tree) | Ganni Devlog</title>
+<meta name="keywords" content="Gini Impurity, Entropy, Cross Entropy, Information Gain, Classification" />
+<meta name="description" content="LightGBM XGBoost와 같은 Gradient Boosting Decision Tree (GBDT) 기반 앙상블 모델은 Kaggle Competition 상위권 팀에서 많이 사용하는 모델로 유명합니다. 이번 글에서는 Decision Tree 분류 모델에 대해 알아보겠습니다.
+ Decision Tree Decision Tree (의사결정 나무)는 데이터에 내재되어 있는 패턴을 예측 가능한 분류 규칙들의 조합으로 나타내어 목표 변수에 대한 분류(Classification) 또는 예측(Regression)을 수행하는 기법입니다. 질문을 던지면서 찾고자 하는 대상을 좁혀나가는 일련의 필터링 과정 혹은 스무고개 놀이와 비슷한 개념으로 아래 그림과 같이 트리의 형태를 가지고 있습니다.">
+<meta name="author" content="">
+<link rel="canonical" href="https://koolganni.github.io/posts/machine-learning/decision-tree/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.b15591da31b4f827d6dc0b97cf931d21b01610305321ac220bf755cf6aade94e.css" integrity="sha256-sVWR2jG0&#43;CfW3AuXz5MdIbAWEDBTIawiC/dVz2qt6U4=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.7680afc38aa6b15ddf158a4f3780b7b1f7dde7e91d26f073e6229bb7a0793c92.js" integrity="sha256-doCvw4qmsV3fFYpPN4C3sffd5&#43;kdJvBz5iKbt6B5PJI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://koolganni.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://koolganni.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://koolganni.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://koolganni.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://koolganni.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<meta name="generator" content="Hugo 0.81.0" />
+<meta property="og:title" content="의사결정 나무 (Decision Tree)" />
+<meta property="og:description" content="LightGBM XGBoost와 같은 Gradient Boosting Decision Tree (GBDT) 기반 앙상블 모델은 Kaggle Competition 상위권 팀에서 많이 사용하는 모델로 유명합니다. 이번 글에서는 Decision Tree 분류 모델에 대해 알아보겠습니다.
+ Decision Tree Decision Tree (의사결정 나무)는 데이터에 내재되어 있는 패턴을 예측 가능한 분류 규칙들의 조합으로 나타내어 목표 변수에 대한 분류(Classification) 또는 예측(Regression)을 수행하는 기법입니다. 질문을 던지면서 찾고자 하는 대상을 좁혀나가는 일련의 필터링 과정 혹은 스무고개 놀이와 비슷한 개념으로 아래 그림과 같이 트리의 형태를 가지고 있습니다." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://koolganni.github.io/posts/machine-learning/decision-tree/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-02-20T18:51:50&#43;09:00" />
+<meta property="article:modified_time" content="2021-02-20T18:51:50&#43;09:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="의사결정 나무 (Decision Tree)"/>
+<meta name="twitter:description" content="LightGBM XGBoost와 같은 Gradient Boosting Decision Tree (GBDT) 기반 앙상블 모델은 Kaggle Competition 상위권 팀에서 많이 사용하는 모델로 유명합니다. 이번 글에서는 Decision Tree 분류 모델에 대해 알아보겠습니다.
+ Decision Tree Decision Tree (의사결정 나무)는 데이터에 내재되어 있는 패턴을 예측 가능한 분류 규칙들의 조합으로 나타내어 목표 변수에 대한 분류(Classification) 또는 예측(Regression)을 수행하는 기법입니다. 질문을 던지면서 찾고자 하는 대상을 좁혀나가는 일련의 필터링 과정 혹은 스무고개 놀이와 비슷한 개념으로 아래 그림과 같이 트리의 형태를 가지고 있습니다."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://koolganni.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "의사결정 나무 (Decision Tree)",
+      "item": "https://koolganni.github.io/posts/machine-learning/decision-tree/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "의사결정 나무 (Decision Tree)",
+  "name": "의사결정 나무 (Decision Tree)",
+  "description": "LightGBM XGBoost와 같은 Gradient Boosting Decision Tree (GBDT) 기반 앙상블 모델은 Kaggle Competition 상위권 팀에서 많이 사용하는 모델로 유명합니다. 이번 글에서는 Decision Tree 분류 모델에 대해 알아보겠습니다.\n Decision Tree Decision Tree (의사결정 나무)는 데이터에 내재되어 있는 패턴을 예측 가능한 분류 규칙들의 조합으로 나타내어 목표 변수에 대한 분류(Classification) 또는 예측(Regression)을 수행하는 기법입니다. 질문을 던지면서 찾고자 하는 대상을 좁혀나가는 일련의 필터링 과정 혹은 스무고개 놀이와 비슷한 개념으로 아래 그림과 같이 트리의 형태를 가지고 있습니다.",
+  "keywords": [
+    "Gini Impurity", "Entropy", "Cross Entropy", "Information Gain", "Classification"
+  ],
+  "articleBody": " LightGBM XGBoost와 같은 Gradient Boosting Decision Tree (GBDT) 기반 앙상블 모델은 Kaggle Competition 상위권 팀에서 많이 사용하는 모델로 유명합니다. 이번 글에서는 Decision Tree 분류 모델에 대해 알아보겠습니다.\n Decision Tree Decision Tree (의사결정 나무)는 데이터에 내재되어 있는 패턴을 예측 가능한 분류 규칙들의 조합으로 나타내어 목표 변수에 대한 분류(Classification) 또는 예측(Regression)을 수행하는 기법입니다. 질문을 던지면서 찾고자 하는 대상을 좁혀나가는 일련의 필터링 과정 혹은 스무고개 놀이와 비슷한 개념으로 아래 그림과 같이 트리의 형태를 가지고 있습니다.\n위 예시는 타이타닉호 탑승객의 생존 여부를 나타내는 Decision Tree 로 각 내부 노드들은 하나의 입력 변수에, 자식 노드들로 이어지는 가지들은 입력 변수에 의해 분기되는 두 개의 영역으로 대응됩니다.\n아래 그림은 입력 변수 𝑿1 과 𝑿2 에 대한 규칙에 의해 데이터가 𝑹1 ~ 𝑹5 영역으로 분리되는 것을 확인할 수 있습니다.\n이때 어떤 순서로 변수들을 사용하는지에 따라 여러 Decision Tree 를 생성할 수 있습니다. 그렇다면 우리는 어떤 방법으로 더 좋은 Decision Tree 를 만들 수 있을까요? 답은 변별력이 더 좋은 질문을 먼저 찾는 것에 있습니다.\n여기서 불순도 (Impurity)라는 개념을 활용합니다. 이는 노드에 여러 범주가 섞여 있는 것을 의미합니다. Decision Tree 분류 모델은 이러한 불순도를 측정하는 대표적인 지표 Entropy (엔트로피), Gini Impurity (지니 불순도)를 비용 함수로 사용해 불순도를 최소화하는 방향으로 트리의 가지 분할을 진행합니다.\n Entropy 정보 이론(Information Theory)에서 Entropy (엔트로피)는 어떤 사건의 불확실성을 의미합니다. 예를 들어 어떤 사건이 발생할 확률이 낮을수록 어떤 정보일지는 불확실하게 되고 이때 우리는 정보가 많다 혹은 엔트로피가 높다고 표현합니다. 확률에 대한 엔트로피 공식은 아래와 같습니다.\n 𝒑 는 어떤 사건이 일어날 확률입니다. 𝒃 는 로그의 base 로 보통 2 가 사용됩니다.  확률에 대한 엔트로피를 그래프로 그려보면 확률이 낮을수록 엔트로피는 높아지고 확률이 높을수록 엔트로피는 낮아지는 것을 확인할 수 있습니다. 즉, 엔트로피를 감소시키는 것은 사건의 불확실성을 줄이면서 분류/예측이 확실해지는 것으로 이야기할 수 있겠습니다.\n다수의 사건 다시 말해 범주(클래스)가 존재하는 엔트로피에 대한 공식은 아래와 같습니다.\n Cross Entropy (교차 엔트로피) 라고도 말합니다. Decision Tree 에서는 이진 트리를 사용하기 때문에 이진 로그를 사용하며 딥러닝에서는 보통 자연 로그를 사용합니다.  예를 들어 A, B, C, D 클래스를 분류하는 Decision Tree 를 만든다고 가정해봅시다. 아래와 같이 분류된 3가지 결과에 대해 각각 엔트로피를 구해보겠습니다.\nBucket1 에서는 8개의 데이터 모두 A 클래스에 속하는 데이터입니다. 이때 𝒑 는 8/8 = 1 이 되므로 엔트로피는 0 입니다.\nBucket2 와 Bucket3 에서는 8개의 데이터 중 A, B, C, D 클래스가 혼재되어 있습니다. 공식에 따라 엔트로피를 구하면 아래와 같습니다.\nA 클래스로 분류된 데이터만 존재하는 다시 말해 불순도가 0 인 Bucket1 의 엔트로피가 가장 낮으며 A, B, C, D 클래스가 동일한 비율로 존재하는 Bucket3 의 엔트로피가 가장 높은 것을 확인할 수 있습니다.\n Gini Impurity Gini Impurity (지니 불순도)는 어떤 데이터 집합에서 무작위로 라벨(클래스)을 추정할 때 틀릴 확률을 말합니다. 집합에 있는 항목이 모두 같다면 지니 불순도는 최솟값 0 을 갖게 되며 해당 집합은 순도가 높다 혹은 완전히 순수하다고 할 수 있습니다. 확률에 대한 지니 불순도 공식은 아래와 같습니다.\n예를 들어 Chest Pain 유무(True/False)에 따라 심장병이 있는지 혹은 없는지를 분류한다고 가정해봅시다. 총 303명의 환자를 아래와 같이 분류했습니다.\nChest Pain 이 있을 때 지니 불순도를 구하면 아래와 같습니다.\n반대로 Chest Pain 이 없을 때 지니 불순도는 아래와 같습니다.\n이때 Chest Pain 변수가 가지는 (Chest Pain 유무에 따른) 2가지의 지니 불순도는 각각 144개, 159개의 데이터로부터 나타내는 것이기 때문에 둘을 단순히 합해서 사용할 수는 없습니다.\n따라서 Chest Pain 이라는 입력 변수에 대한 지니 불순도는 아래와 같이 지니 불순도의 가중합을 활용해서 구할 수 있습니다.\n 𝑰(𝑫 left) 와 𝑰(𝑫 right) 는 왼쪽 노드와 오른쪽 노드의 지니 불순도를 의미합니다. (𝒏 left)/𝑵𝓶 와 (𝒏 right)/𝑵𝓶 는 전체 데이터에서 차지하는 왼쪽 노드 데이터의 비율과 오른쪽 노드 데이터의 비율을 의미합니다.  이와 동일한 과정으로 Good Blood Circulation 그리고 Blocked Arteries 변수에 대한 지니 불순도를 구하면 아래와 같습니다.\n데이터가 가지는 세 가지 변수 중 지니 불순도가 가장 낮은 것은 Good Blood Circulation 으로 해당 변수가 트리의 루트 노드로 가장 적합하다는 것을 알 수 있습니다.\n추가적으로 지니 불순도는 로그 계산이 필요한 엔트로피보다 연산량이 적습니다. scikit-learn 에서는 기본적으로 지니 불순도를 활용한 CART 알고리즘 기반의 Decision Tree 모듈을 제공합니다.\n Information Gain (IG) 지니 불순도는 가중합을 활용해 트리를 분리시킬 입력 변수를 선택한다면 엔트로피는 Information Gain (정보 획득)을 활용합니다.\nscikit-learn 의 DecisionTreeClassifier 모듈은 트리 분리 기준을 의미하는 criterion 파라미터로 앞서 말한 지니 불순도 그리고 엔트로피에 대한 Information Gain을 제공합니다.\n정보 이론에서 Information Gain (정보 획득)이란 주어진 정보로 인해 확률변수의 불확실성이 얼마나 감소했는지를 나타내는 지표입니다. 즉, 특정 변수를 사용했을 때 불순도의 감소량을 의미합니다.\n위 공식과 같이 𝑰𝑮 (Information Gain) 은 부모 노드의 데이터셋 𝑫𝑝 를 입력 변수 𝒇 로 분리했을 때 부모 노드의 불순도에서 모든 자식 노드의 불순도를 뺀 값입니다.\n예를 들어 환자의 Symptom A, B, C 유무(True/False)에 따라 질병이 있는지 혹은 없는지를 분류하는 Decision Tree 를 만든다고 가정해봅시다.\n세 가지의 독립 변수 중에서 어떤 변수를 루트 노드로 하는 것이 좋을지 Information Gain 을 구해 비교해봅시다. 먼저 변수를 선택하기 전의 엔트로피와 Symptom A 로 데이터를 분리했을 때 엔트로피를 계산하면 아래와 같습니다.\n👉 Symptom A 변수에 대한 Information Gain 은 0.971 에서 0.951 을 뺀 값인 0.02 가 됩니다.\n동일한 방법으로 Symptom B 변수에 대한 IG 는 0.419 그리고 Symptom C 변수에 대한 IG 는 0.171 로 구할 수 있습니다. 최종적으로 이 데이터에서는 IG 값이 가장 큰 다시 말해 엔트로피 감소량이 가장 큰 Symptom A 가 트리의 첫번째 분리 기준이 되는 것이 적합하다고 말할 수 있습니다.\n이러한 Information Gain 은 ID3 와 C4.5 그리고 C5.0 알고리즘 기반의 Decision Tree 에서 불순도 측도로 사용됩니다.\n 모델의 학습 Decision Tree 의 학습은 학습에 사용되는 데이터 집합을 적절한 분할 기준에 따라 부분 집합들로 나누는 과정입니다. 이때 분할 기준의 예시로는 앞서 살펴본 지니 불순도와 엔트로피가 있겠습니다.\n분할 과정은 각각의 나눠진 자료 부분 집합에 재귀적으로 반복되며 분할로 인해 더 이상 새로운 예측 값이 추가되지 않거나 부분 집합의 노드가 목표 변수와 같은 값을 지닐 때까지 계속됩니다.\n이러한 하향식 결정 트리 귀납법(top-down induction of decision trees, TDIDT)은 Greedy(탐욕) 알고리즘의 한 예시이며 데이터로부터 결정 트리를 학습하는 가장 일반적인 방법입니다.\n다만 한 가지 주의할 점은 트리의 분기가 너무 많다면 학습 데이터에 오버피팅 할 위험이 있습니다. 결정 트리의 분기 수가 일정 수준 이상이 되면 새로운 데이터에 대해 분류가 잘되지 않는 현상이 발생합니다. 따라서 검증 데이터에 대한 오분류율이 증가하는 시점에서 적절한 가지치기 (Pruning)를 수행해야 합니다.\n결정 트리는 가지치기 (Pruning)의 비용 함수를 최소로 하는 분기를 찾아내도록 학습됩니다. 비용 함수식은 아래와 같습니다.\n 𝑪𝑪(𝑻) : 결정 트리의 비용 복잡도 𝑬𝑹𝑹(𝑻) : 검증 데이터에 대한 오분류율 𝑳(𝑻) : 단말 노드의 수 (구조의 복잡도) 𝜶 : 하이퍼파라미터로 보통 0.01 에서 0.1 사이의 값   모델의 한계 Decision Tree 모델은 한 개의 변수만을 선택하기 때문에 데이터의 특성이 해당 변수에 의해 수직 혹은 수평적으로 구분되지 못할 때 분류율이 떨어지고 트리가 복잡해지는 문제가 발생합니다. 앞서 살펴본 가지치기의 비용 함수에서 확인할 수 있듯이 단말 노드의 수가 증가할수록 오버피팅 위험이 있습니다.\n또한 학습 데이터의 미세한 변동에도 최종 결과가 크게 영향을 받습니다. 예를 들어 두 변수가 비슷한 수준의 정보력을 갖지만, 약간의 차이에 의해 다른 변수가 선택되면 이후 트리 구성이 크게 달라질 수 있기 때문입니다.\n이러한 결정 트리의 한계를 보완하기 위해 랜덤 포레스트 (Random Forest)모델은 같은 데이터에 대해 결정 트리를 여러 개 만들어서 그 결과를 집계해 예측 성능을 높입니다.\n References  의사결정나무모델 1 (모델개요, 예측나무) - 고려대 김성범 교수님 의사결정나무모델 2 (분류나무, Information Gain) - 고려대 김성범 교수님 결정 트리 학습법 - 위키백과 정보 엔트로피 - 위키백과 https://medium.com/udacity/shannon-entropy-information-gain-and-picking-balls-from-buckets-5810d35d54b4 Decision Trees - StatQuest with Josh Starmer https://en.wikipedia.org/wiki/Information_gain_in_decision_trees  ",
+  "wordCount" : "1137",
+  "inLanguage": "en",
+  "datePublished": "2021-02-20T18:51:50+09:00",
+  "dateModified": "2021-02-20T18:51:50+09:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://koolganni.github.io/posts/machine-learning/decision-tree/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Ganni Devlog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://koolganni.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+<noscript>
+    <style type="text/css">
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: #1d1e20;
+                --entry: #2e2e33;
+                --primary: rgba(255, 255, 255, 0.84);
+                --secondary: rgba(255, 255, 255, 0.56);
+                --tertiary: rgba(255, 255, 255, 0.16);
+                --content: rgba(255, 255, 255, 0.74);
+                --hljs-bg: #2e2e33;
+                --code-bg: #37383e;
+                --border: #333;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://koolganni.github.io/" accesskey="h" title="Ganni Devlog (Alt + H)">Ganni Devlog</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu" onscroll="menu_on_scroll()">
+            <li>
+                <a href="https://koolganni.github.io/categories/" title="Categories">
+                    <span>Categories</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://koolganni.github.io/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title">
+      의사결정 나무 (Decision Tree)
+    </h1>
+    <div class="post-meta">February 20, 2021
+</div>
+  </header> 
+  <div class="post-content"><blockquote>
+<p><code>LightGBM</code> <code>XGBoost</code>와 같은 Gradient Boosting Decision Tree (GBDT) 기반 앙상블 모델은 Kaggle Competition 상위권 팀에서 많이 사용하는 모델로 유명합니다. 이번 글에서는 <code>Decision Tree</code> 분류 모델에 대해 알아보겠습니다.</p>
+</blockquote>
+<h3 id="decision-tree">Decision Tree<a hidden class="anchor" aria-hidden="true" href="#decision-tree">#</a></h3>
+<p><code>Decision Tree (의사결정 나무)</code>는 데이터에 내재되어 있는 패턴을 예측 가능한 분류 규칙들의 조합으로 나타내어 목표 변수에 대한 <strong>분류</strong>(Classification) 또는 <strong>예측</strong>(Regression)을 수행하는 기법입니다. 질문을 던지면서 찾고자 하는 대상을 좁혀나가는 일련의 필터링 과정 혹은 스무고개 놀이와 비슷한 개념으로 아래 그림과 같이 <strong>트리</strong>의 형태를 가지고 있습니다.</p>
+<p><img loading="lazy" src="https://user-images.githubusercontent.com/76609403/119344754-fd138100-bcd2-11eb-8cc0-d1da74ee1949.png" alt="image"  />
+</p>
+<p>위 예시는 타이타닉호 탑승객의 생존 여부를 나타내는 Decision Tree 로 각 내부 노드들은 하나의 입력 변수에, 자식 노드들로 이어지는 가지들은 입력 변수에 의해 분기되는 두 개의 영역으로 대응됩니다.</p>
+<p>아래 그림은 입력 변수 𝑿1 과 𝑿2 에 대한 규칙에 의해 데이터가 𝑹1 ~ 𝑹5 영역으로 분리되는 것을 확인할 수 있습니다.</p>
+<p><img loading="lazy" src="https://user-images.githubusercontent.com/76609403/119676842-25d57b00-be79-11eb-9efb-e03a5cfd67f3.png" alt="image"  />
+</p>
+<p>이때 어떤 순서로 변수들을 사용하는지에 따라 여러 Decision Tree 를 생성할 수 있습니다. 그렇다면 우리는 어떤 방법으로 더 좋은 Decision Tree 를 만들 수 있을까요? 답은 <strong>변별력이 더 좋은 질문</strong>을 먼저 찾는 것에 있습니다.</p>
+<p><img loading="lazy" src="https://user-images.githubusercontent.com/76609403/119367481-f72a9980-bcec-11eb-8e34-0164db794f22.png" alt="image"  />
+</p>
+<p>여기서 <code>불순도 (Impurity)</code>라는 개념을 활용합니다. 이는 노드에 여러 범주가 섞여 있는 것을 의미합니다. Decision Tree 분류 모델은 이러한 불순도를 측정하는 대표적인 지표 <code>Entropy (엔트로피)</code>, <code>Gini Impurity (지니 불순도)</code>를 <strong>비용 함수</strong>로 사용해 불순도를 <strong>최소화하는</strong> 방향으로 트리의 가지 분할을 진행합니다.</p>
+<hr>
+<h3 id="entropy">Entropy<a hidden class="anchor" aria-hidden="true" href="#entropy">#</a></h3>
+<p>정보 이론(Information Theory)에서 <code>Entropy (엔트로피)</code>는 어떤 사건의 <strong>불확실성</strong>을 의미합니다. 예를 들어 어떤 사건이 발생할 <strong>확률이 낮을수록</strong> 어떤 정보일지는 불확실하게 되고 이때 우리는 <strong>정보가 많다</strong> 혹은 <strong>엔트로피가 높다</strong>고 표현합니다. 확률에 대한 엔트로피 공식은 아래와 같습니다.</p>
+<p><img loading="lazy" src="https://user-images.githubusercontent.com/76609403/119960263-be860b00-bfdf-11eb-9b32-6e9b598f3ff7.png" alt="image"  />
+</p>
+<ul>
+<li>𝒑 는 어떤 사건이 일어날 확률입니다.</li>
+<li>𝒃 는 로그의 base 로 보통 2 가 사용됩니다.</li>
+</ul>
+<p><img loading="lazy" src="https://user-images.githubusercontent.com/76609403/119960864-60a5f300-bfe0-11eb-8721-57d7dcddb078.png" alt="image"  />
+</p>
+<p>확률에 대한 엔트로피를 그래프로 그려보면 확률이 낮을수록 엔트로피는 높아지고 확률이 높을수록 엔트로피는 낮아지는 것을 확인할 수 있습니다. 즉, 엔트로피를 감소시키는 것은 사건의 불확실성을 줄이면서 <strong>분류/예측이 확실</strong>해지는 것으로 이야기할 수 있겠습니다.</p>
+<p>다수의 사건 다시 말해 범주(클래스)가 존재하는 엔트로피에 대한 공식은 아래와 같습니다.</p>
+<p><img loading="lazy" src="https://user-images.githubusercontent.com/76609403/119962125-b16a1b80-bfe1-11eb-9674-ce4a6aa98764.png" alt="image"  />
+</p>
+<ul>
+<li><code>Cross Entropy (교차 엔트로피)</code> 라고도 말합니다.</li>
+<li>Decision Tree 에서는 이진 트리를 사용하기 때문에 이진 로그를 사용하며 딥러닝에서는 보통 자연 로그를 사용합니다.</li>
+</ul>
+<p>예를 들어 A, B, C, D 클래스를 분류하는 Decision Tree 를 만든다고 가정해봅시다. 아래와 같이 분류된 3가지 결과에 대해 각각 엔트로피를 구해보겠습니다.</p>
+<p><img loading="lazy" src="https://user-images.githubusercontent.com/76609403/119964547-49690480-bfe4-11eb-95cf-6d2484689efd.png" alt="image"  />
+</p>
+<p>Bucket1 에서는 8개의 데이터 모두 A 클래스에 속하는 데이터입니다. 이때 𝒑 는 8/8 = 1 이 되므로 엔트로피는 0 입니다.</p>
+<p><img loading="lazy" src="https://user-images.githubusercontent.com/76609403/119965083-d8761c80-bfe4-11eb-8c1b-e1b8ee35fafa.png" alt="image"  />
+</p>
+<p>Bucket2 와 Bucket3 에서는 8개의 데이터 중 A, B, C, D 클래스가 혼재되어 있습니다. 공식에 따라 엔트로피를 구하면 아래와 같습니다.</p>
+<p><img loading="lazy" src="https://user-images.githubusercontent.com/76609403/119965564-5df9cc80-bfe5-11eb-825d-da20d40cff6d.png" alt="image"  />
+</p>
+<p><img loading="lazy" src="https://user-images.githubusercontent.com/76609403/119965808-a44f2b80-bfe5-11eb-99dc-d4504665a5ca.png" alt="image"  />
+</p>
+<p>A 클래스로 분류된 데이터만 존재하는 다시 말해 불순도가 0 인 Bucket1 의 엔트로피가 가장 낮으며 A, B, C, D 클래스가 동일한 비율로 존재하는 Bucket3 의 엔트로피가 가장 높은 것을 확인할 수 있습니다.</p>
+<hr>
+<h3 id="gini-impurity">Gini Impurity<a hidden class="anchor" aria-hidden="true" href="#gini-impurity">#</a></h3>
+<p><code>Gini Impurity (지니 불순도)</code>는 어떤 데이터 집합에서 무작위로 라벨(클래스)을 추정할 때 <strong>틀릴 확률</strong>을 말합니다. 집합에 있는 항목이 모두 같다면 지니 불순도는 최솟값 0 을 갖게 되며 해당 집합은 <strong>순도가 높다</strong> 혹은 완전히 순수하다고 할 수 있습니다. 확률에 대한 지니 불순도 공식은 아래와 같습니다.</p>
+<p><img loading="lazy" src="https://user-images.githubusercontent.com/76609403/119976888-ba171d80-bff2-11eb-8f7b-cbbdaa65d3bc.png" alt="image"  />
+</p>
+<p>예를 들어 Chest Pain 유무(True/False)에 따라 심장병이 있는지 혹은 없는지를 분류한다고 가정해봅시다. 총 303명의 환자를 아래와 같이 분류했습니다.</p>
+<p><img loading="lazy" src="https://user-images.githubusercontent.com/76609403/120062981-e472e480-c09f-11eb-9745-1505a601cfa3.png" alt="image"  />
+</p>
+<p>Chest Pain 이 있을 때 지니 불순도를 구하면 아래와 같습니다.</p>
+<p><img loading="lazy" src="https://user-images.githubusercontent.com/76609403/120063159-c954a480-c0a0-11eb-8fe4-2272a1712591.png" alt="image"  />
+</p>
+<p>반대로 Chest Pain 이 없을 때 지니 불순도는 아래와 같습니다.</p>
+<p><img loading="lazy" src="https://user-images.githubusercontent.com/76609403/120063186-edb08100-c0a0-11eb-8bf2-ea6722c6a306.png" alt="image"  />
+</p>
+<p>이때 Chest Pain 변수가 가지는 (Chest Pain 유무에 따른) 2가지의 지니 불순도는 각각 144개, 159개의 데이터로부터 나타내는 것이기 때문에 둘을 단순히 합해서 사용할 수는 없습니다.</p>
+<p>따라서 Chest Pain 이라는 입력 변수에 대한 지니 불순도는 아래와 같이 지니 불순도의 <strong>가중합</strong>을 활용해서 구할 수 있습니다.</p>
+<p><img loading="lazy" src="https://user-images.githubusercontent.com/76609403/120064025-3702cf80-c0a5-11eb-9a79-b844fe70d52f.png" alt="image"  />
+</p>
+<ul>
+<li>𝑰(𝑫 left) 와 𝑰(𝑫 right) 는 왼쪽 노드와 오른쪽 노드의 지니 불순도를 의미합니다.</li>
+<li>(𝒏 left)/𝑵𝓶 와 (𝒏 right)/𝑵𝓶 는 전체 데이터에서 차지하는 왼쪽 노드 데이터의 비율과 오른쪽 노드 데이터의 비율을 의미합니다.</li>
+</ul>
+<p><img loading="lazy" src="https://user-images.githubusercontent.com/76609403/120063370-da51e580-c0a1-11eb-84e0-69230c0a14e7.png" alt="image"  />
+</p>
+<p>이와 동일한 과정으로 Good Blood Circulation 그리고 Blocked Arteries 변수에 대한 지니 불순도를 구하면 아래와 같습니다.</p>
+<p><img loading="lazy" src="https://user-images.githubusercontent.com/76609403/120063733-97910d00-c0a3-11eb-8987-852584377c1d.png" alt="image"  />
+</p>
+<p>데이터가 가지는 세 가지 변수 중 지니 불순도가 가장 <strong>낮은</strong> 것은 Good Blood Circulation 으로 해당 변수가 트리의 루트 노드로 가장 적합하다는 것을 알 수 있습니다.</p>
+<p>추가적으로 지니 불순도는 로그 계산이 필요한 엔트로피보다 연산량이 적습니다. scikit-learn 에서는 기본적으로 지니 불순도를 활용한 <strong>CART</strong> 알고리즘 기반의 Decision Tree 모듈을 제공합니다.</p>
+<hr>
+<h3 id="information-gain-ig">Information Gain (IG)<a hidden class="anchor" aria-hidden="true" href="#information-gain-ig">#</a></h3>
+<p>지니 불순도는 가중합을 활용해 트리를 분리시킬 입력 변수를 선택한다면 엔트로피는 <code>Information Gain (정보 획득)</code>을 활용합니다.</p>
+<p>scikit-learn 의 <a href="https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html">DecisionTreeClassifier</a> 모듈은 트리 분리 기준을 의미하는 criterion 파라미터로 앞서 말한 지니 불순도 그리고  <code>엔트로피에 대한 Information Gain</code>을 제공합니다.</p>
+<p>정보 이론에서 <code>Information Gain (정보 획득)</code>이란 주어진 정보로 인해 확률변수의 <strong>불확실성이 얼마나 감소</strong>했는지를 나타내는 지표입니다. 즉, 특정 변수를 사용했을 때 <strong>불순도의 감소량</strong>을 의미합니다.</p>
+<p><img loading="lazy" src="https://user-images.githubusercontent.com/76609403/120066797-222d3880-c0b3-11eb-8c59-d24696c4663f.png" alt="image"  />
+</p>
+<p>위 공식과 같이 𝑰𝑮 (Information Gain) 은 부모 노드의 데이터셋 𝑫𝑝 를 입력 변수 𝒇 로 분리했을 때 부모 노드의 불순도에서 모든 자식 노드의 불순도를 뺀 값입니다.</p>
+<p>예를 들어 환자의 Symptom A, B, C 유무(True/False)에 따라 질병이 있는지 혹은 없는지를 분류하는 Decision Tree 를 만든다고 가정해봅시다.</p>
+<p><img loading="lazy" src="https://user-images.githubusercontent.com/76609403/120071642-3a10b680-c0cb-11eb-8546-495a2dbe3bde.png" alt="image"  />
+</p>
+<p>세 가지의 독립 변수 중에서 어떤 변수를 루트 노드로 하는 것이 좋을지 Information Gain 을 구해 비교해봅시다. 먼저 변수를 선택하기 전의 엔트로피와 Symptom A 로 데이터를 분리했을 때 엔트로피를 계산하면 아래와 같습니다.</p>
+<p><img loading="lazy" src="https://user-images.githubusercontent.com/76609403/120071992-86a8c180-c0cc-11eb-8053-9a9636e0ec06.png" alt="image"  />
+</p>
+<p><img loading="lazy" src="https://user-images.githubusercontent.com/76609403/120072080-de472d00-c0cc-11eb-97cc-651c6fd0666c.png" alt="image"  />
+</p>
+<p>👉 Symptom A 변수에 대한 Information Gain 은 0.971 에서 0.951 을 뺀 값인 0.02 가 됩니다.</p>
+<p>동일한 방법으로 Symptom B 변수에 대한 IG 는 0.419 그리고 Symptom C 변수에 대한 IG 는 0.171 로 구할 수 있습니다. 최종적으로 이 데이터에서는 <strong>IG 값이 가장 큰</strong> 다시 말해 엔트로피 감소량이 가장 큰 Symptom A 가 트리의 첫번째 분리 기준이 되는 것이 적합하다고 말할 수 있습니다.</p>
+<p>이러한 Information Gain 은 ID3 와 C4.5 그리고 C5.0 알고리즘 기반의 Decision Tree 에서 불순도 측도로 사용됩니다.</p>
+<hr>
+<h3 id="모델의-학습">모델의 학습<a hidden class="anchor" aria-hidden="true" href="#모델의-학습">#</a></h3>
+<p>Decision Tree 의 학습은 학습에 사용되는 데이터 집합을 적절한 분할 기준에 따라 <strong>부분 집합들로 나누는 과정</strong>입니다. 이때 분할 기준의 예시로는 앞서 살펴본 <code>지니 불순도</code>와 <code>엔트로피</code>가 있겠습니다.</p>
+<p>분할 과정은 각각의 나눠진 자료 부분 집합에 <strong>재귀적으로 반복</strong>되며 분할로 인해 더 이상 새로운 예측 값이 추가되지 않거나 부분 집합의 노드가 목표 변수와 같은 값을 지닐 때까지 계속됩니다.</p>
+<p>이러한 <strong>하향식</strong> 결정 트리 귀납법(top-down induction of decision trees, TDIDT)은 <code>Greedy(탐욕) 알고리즘</code>의 한 예시이며 데이터로부터 결정 트리를 학습하는 가장 일반적인 방법입니다.</p>
+<p>다만 한 가지 주의할 점은 트리의 분기가 너무 많다면 학습 데이터에 <strong>오버피팅</strong> 할 위험이 있습니다. 결정 트리의 분기 수가 일정 수준 이상이 되면 새로운 데이터에 대해 분류가 잘되지 않는 현상이 발생합니다. 따라서 검증 데이터에 대한 오분류율이 증가하는 시점에서 적절한 <code>가지치기 (Pruning)</code>를 수행해야 합니다.</p>
+<p><img loading="lazy" src="https://user-images.githubusercontent.com/76609403/120073311-b3f86e00-c0d2-11eb-9adc-6f97fc26ec58.png" alt="image"  />
+</p>
+<p>결정 트리는 <code>가지치기 (Pruning)</code>의 비용 함수를 최소로 하는 분기를 찾아내도록 학습됩니다. 비용 함수식은 아래와 같습니다.</p>
+<p><img loading="lazy" src="https://user-images.githubusercontent.com/76609403/120073517-95df3d80-c0d3-11eb-88cb-5c45169ac84d.png" alt="image"  />
+</p>
+<ul>
+<li>𝑪𝑪(𝑻) : 결정 트리의 비용 복잡도</li>
+<li>𝑬𝑹𝑹(𝑻) : 검증 데이터에 대한 오분류율</li>
+<li>𝑳(𝑻) : 단말 노드의 수 (구조의 복잡도)</li>
+<li>𝜶 : 하이퍼파라미터로 보통 0.01 에서 0.1 사이의 값</li>
+</ul>
+<hr>
+<h3 id="모델의-한계">모델의 한계<a hidden class="anchor" aria-hidden="true" href="#모델의-한계">#</a></h3>
+<p>Decision Tree 모델은 한 개의 변수만을 선택하기 때문에 데이터의 특성이 해당 변수에 의해 수직 혹은 수평적으로 구분되지 못할 때 분류율이 떨어지고 트리가 <strong>복잡</strong>해지는 문제가 발생합니다. 앞서 살펴본 가지치기의 비용 함수에서 확인할 수 있듯이 단말 노드의 수가 증가할수록 <strong>오버피팅</strong> 위험이 있습니다.</p>
+<p>또한 학습 데이터의 미세한 변동에도 최종 결과가 크게 영향을 받습니다. 예를 들어 두 변수가 비슷한 수준의 정보력을 갖지만, 약간의 차이에 의해 다른 변수가 선택되면 이후 <strong>트리 구성</strong>이 크게 달라질 수 있기 때문입니다.</p>
+<p>이러한 결정 트리의 한계를 보완하기 위해 <code>랜덤 포레스트 (Random Forest)</code>모델은 같은 데이터에 대해 결정 트리를 여러 개 만들어서 그 결과를 집계해 예측 성능을 높입니다.</p>
+<hr>
+<h3 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h3>
+<ul>
+<li><a href="https://youtu.be/xki7zQDf74I">의사결정나무모델 1 (모델개요, 예측나무) - 고려대 김성범 교수님</a></li>
+<li><a href="https://youtu.be/2Rd4AqmLjfU">의사결정나무모델 2 (분류나무, Information Gain) - 고려대 김성범 교수님</a></li>
+<li><a href="https://ko.wikipedia.org/wiki/%EA%B2%B0%EC%A0%95_%ED%8A%B8%EB%A6%AC_%ED%95%99%EC%8A%B5%EB%B2%95">결정 트리 학습법 - 위키백과</a></li>
+<li><a href="https://ko.wikipedia.org/wiki/%EC%A0%95%EB%B3%B4_%EC%97%94%ED%8A%B8%EB%A1%9C%ED%94%BC">정보 엔트로피 - 위키백과</a></li>
+<li><a href="https://medium.com/udacity/shannon-entropy-information-gain-and-picking-balls-from-buckets-5810d35d54b4">https://medium.com/udacity/shannon-entropy-information-gain-and-picking-balls-from-buckets-5810d35d54b4</a></li>
+<li><a href="https://youtu.be/7VeUPuFGJHk">Decision Trees - StatQuest with Josh Starmer</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Information_gain_in_decision_trees">https://en.wikipedia.org/wiki/Information_gain_in_decision_trees</a></li>
+</ul>
+
+</div>
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://koolganni.github.io/tags/gini-impurity/">Gini Impurity</a></li>
+      <li><a href="https://koolganni.github.io/tags/entropy/">Entropy</a></li>
+      <li><a href="https://koolganni.github.io/tags/cross-entropy/">Cross Entropy</a></li>
+      <li><a href="https://koolganni.github.io/tags/information-gain/">Information Gain</a></li>
+      <li><a href="https://koolganni.github.io/tags/classification/">Classification</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    <footer class="footer">
+    <span>&copy; 2021 <a href="https://koolganni.github.io/">Ganni Devlog</a></span>
+    <span>&middot;</span>
+    <span>Powered by <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a></span>
+    <span>&middot;</span>
+    <span>Theme <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a></span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)">
+    <button class="top-link" id="top-link" type="button" accesskey="g">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+            <path d="M12 6H0l6-6z" />
+        </svg>
+    </button>
+</a>
+
+<script>
+    window.onload = function () {
+        if (localStorage.getItem("menu-scroll-position")) {
+            document.getElementById('menu').scrollLeft = localStorage.getItem("menu-scroll-position");
+        }
+    }
+
+    function menu_on_scroll() {
+        localStorage.setItem("menu-scroll-position", document.getElementById('menu').scrollLeft);
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        container.appendChild(copybutton);
+    });
+</script>
+</body>
+
+</html>

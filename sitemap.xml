@@ -11,6 +11,9 @@
     <loc>https://koolganni.github.io/posts/machine-learning/gradient-descent/</loc>
     <lastmod>2021-04-11T19:22:21+09:00</lastmod>
   </url><url>
+    <loc>https://koolganni.github.io/posts/machine-learning/decision-tree/</loc>
+    <lastmod>2021-02-20T18:51:50+09:00</lastmod>
+  </url><url>
     <loc>https://koolganni.github.io/posts/machine-learning/logistic-regression/</loc>
     <lastmod>2021-02-13T19:44:41+09:00</lastmod>
   </url><url>
@@ -75,10 +78,19 @@
     <lastmod>2021-04-11T19:22:21+09:00</lastmod>
   </url><url>
     <loc>https://koolganni.github.io/tags/classification/</loc>
-    <lastmod>2021-02-13T19:44:41+09:00</lastmod>
+    <lastmod>2021-02-20T18:51:50+09:00</lastmod>
   </url><url>
     <loc>https://koolganni.github.io/tags/cross-entropy/</loc>
-    <lastmod>2021-02-13T19:44:41+09:00</lastmod>
+    <lastmod>2021-02-20T18:51:50+09:00</lastmod>
+  </url><url>
+    <loc>https://koolganni.github.io/tags/entropy/</loc>
+    <lastmod>2021-02-20T18:51:50+09:00</lastmod>
+  </url><url>
+    <loc>https://koolganni.github.io/tags/gini-impurity/</loc>
+    <lastmod>2021-02-20T18:51:50+09:00</lastmod>
+  </url><url>
+    <loc>https://koolganni.github.io/tags/information-gain/</loc>
+    <lastmod>2021-02-20T18:51:50+09:00</lastmod>
   </url><url>
     <loc>https://koolganni.github.io/tags/logistic/</loc>
     <lastmod>2021-02-13T19:44:41+09:00</lastmod>
